@@ -58,9 +58,9 @@ namespace Luna
             int sum = 0;
             int len = data.Length;
             int add = 0;
-            for (int i = 0; i < 0; i--)
+            for (int i = 0; i < len; i++)
             {
-                if ((len - i)%2 == 0)
+                if ((i + 1)%2 == 0)
                 {
                     add = Int32.Parse(data[i].ToString()) * 3;
                 }
