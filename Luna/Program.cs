@@ -13,8 +13,9 @@ namespace Luna
         {
             Console.WriteLine("***** АудитПарсер v. 0.1 *****");
             Console.WriteLine();
-            string readPath = @"123.dat";
-            string writePath = @"123_BAR.dat";
+            Console.Write("Введите имя файла: ");
+            string readPath = Console.ReadLine();
+            string writePath = readPath.Replace(".","_BAR.");
             string line;
             string[] row;
             string data = "";
@@ -24,16 +25,13 @@ namespace Luna
             {
                 while ((line = sr.ReadLine()) != null)
                 {
-                    Console.WriteLine(line);
                     row = line.Split('|');
                     foreach (string s in row)
                     {
-                        if (row[2] == s && s != "\"MS3\"")
+                        if (row[2] == s && s != "\"MagstripeRead3\"")
                         {
                             data = "94" + s.Trim(trimChars);
                             checkDigit = CalcEAN13(data).ToString();
-                            Console.WriteLine(data + checkDigit);
-                            Console.WriteLine();
                         }
                     }
                     line += "|\"" + data + checkDigit + "\"";
@@ -42,6 +40,13 @@ namespace Luna
                         sw.WriteLine(line);
                     }
                 }
+            }
+            FileInfo fileInf = new FileInfo(writePath);
+            if (fileInf.Exists)
+            {
+                Console.WriteLine("Создан файл с баркодами:");
+                Console.WriteLine("Имя файла: {0}", fileInf.Name);
+                Console.WriteLine("Время создания: {0}", fileInf.CreationTime);
             }
             Console.ReadLine();
         }
@@ -76,12 +81,8 @@ namespace Luna
                     add = Int32.Parse(data[i].ToString());
                 }
                 sum += add;
-                //Console.WriteLine(data[i] + "    " + add + "   " + (len - i));
             }
-            Console.WriteLine($"check сумма = {sum}");
-            Console.WriteLine(10 - sum % 10);
-            int check = 10 - sum % 10 == 10 ? 0 : 10 - sum % 10;
-            Console.WriteLine($"check digit = {check}");
+            int check = (10 - (sum % 10)) % 10;
             return check;
         }
     }
