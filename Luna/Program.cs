@@ -13,26 +13,33 @@ namespace Luna
         {
             Console.WriteLine("***** АудитПарсер v. 0.1 *****");
             Console.WriteLine();
-            string path = @"123.dat";
+            string readPath = @"123.dat";
+            string writePath = @"123_BAR.dat";
             string line;
             string[] row;
-            string data;
+            string data = "";
             char[] trimChars = { '"', '?', '_', '%', ';' };
-            int checkDigit;
-            using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            string checkDigit = "BAR";
+            using (StreamReader sr = new StreamReader(readPath, System.Text.Encoding.Default))
             {
                 while ((line = sr.ReadLine()) != null)
                 {
+                    Console.WriteLine(line);
                     row = line.Split('|');
                     foreach (string s in row)
                     {
                         if (row[2] == s && s != "\"MS3\"")
                         {
                             data = "94" + s.Trim(trimChars);
-                            checkDigit = CalcEAN13(data);
+                            checkDigit = CalcEAN13(data).ToString();
                             Console.WriteLine(data + checkDigit);
                             Console.WriteLine();
                         }
+                    }
+                    line += "|\"" + data + checkDigit + "\"";
+                    using (StreamWriter sw = new StreamWriter(writePath, true))
+                    {
+                        sw.WriteLine(line);
                     }
                 }
             }
