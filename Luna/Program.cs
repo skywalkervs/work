@@ -35,7 +35,7 @@ namespace Luna
                         }
                     }
                     line += "|\"" + data + checkDigit + "\"";
-                    using (StreamWriter sw = new StreamWriter(writePath, true))
+                    using (StreamWriter sw = new StreamWriter(writePath, true, System.Text.Encoding.Default))
                     {
                         sw.WriteLine(line);
                     }
